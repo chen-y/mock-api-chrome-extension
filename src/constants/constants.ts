@@ -5,6 +5,7 @@ export enum ColumnKeyEnum {
   DESC = 'desc',
   RESPONSE = 'resopnse',
   MODEL = 'model',
+  MODE = 'mode',
 }
 
 interface ColumnConfig {
@@ -15,7 +16,7 @@ export const COLUMN_CONFIG_MAP: Map<ColumnKeyEnum, ColumnConfig> = new Map([
   [
     ColumnKeyEnum.OPEN,
     {
-      name: '打开/关闭',
+      name: '开关',
     },
   ],
   [
@@ -110,4 +111,4 @@ export const KEYWORDS_LIST = [
   },
 ]
 
-export const CACHE_CONFIG_KEY = 'mc_dataset';
+export const CACHE_CONFIG_KEY = 'mc_dataset'

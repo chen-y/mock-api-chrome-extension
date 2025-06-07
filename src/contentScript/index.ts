@@ -1,2 +1,5 @@
-console.info('contentScript is running')
-console.info(chrome.storage)
+console.info('contentScript is run')
+// console.info(chrome.storage)
+// import { setupXMLRequestProxy } from '../utils'
+
+// setupXMLRequestProxy(window)

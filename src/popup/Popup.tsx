@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import { Button } from 'antd';
+import { Button } from 'antd'
 
-import CommonList from '../components/CommonList';
+import CommonList from '../components/CommonList'
 
 import './Popup.css'
 

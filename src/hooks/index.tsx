@@ -8,6 +8,7 @@ export interface ConfigModel {
   [ColumnKeyEnum.OPEN]: boolean
   [ColumnKeyEnum.RESPONSE]: string
   [ColumnKeyEnum.PATH]: string
+  mode: ColumnKeyEnum.RESPONSE | ColumnKeyEnum.MODEL
   id: string
 }
 
@@ -16,7 +17,7 @@ export default function useDataset() {
 
   const update = (newList: ConfigModel[]) => {
     chrome.storage.sync.set({ [CACHE_CONFIG_KEY]: [...newList] })
-    setDataset(newList);
+    setDataset(newList)
   }
 
   const insert = (m: ConfigModel) => {
@@ -31,10 +32,11 @@ export default function useDataset() {
 
   const edit = (m: ConfigModel) => {
     const index = dataset?.findIndex((d) => d.id === m.id)
+    const newDataset = [...dataset]
     if (index) {
-      dataset[index] = m
+      newDataset[index] = m
     }
-    update([...dataset])
+    update(newDataset)
   }
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function useDataset() {
     chrome.storage.sync.get([CACHE_CONFIG_KEY]).then((res) => {
       console.info(res, 'res')
       if (res?.[CACHE_CONFIG_KEY]) {
-        setDataset([res[CACHE_CONFIG_KEY]])
+        setDataset(res[CACHE_CONFIG_KEY])
       }
     })
   }, [])

@@ -1,5 +1,10 @@
-import { AutoComplete, Form, Input, Modal, Select, Space, Switch } from 'antd'
-import { MethodEnum, ColumnKeyEnum, KEYWORDS_LIST, CACHE_CONFIG_KEY } from '../../constants/constants'
+import { AutoComplete, Form, Input, Modal, Select, Space, Switch, Radio } from 'antd'
+import {
+  MethodEnum,
+  ColumnKeyEnum,
+  KEYWORDS_LIST,
+  CACHE_CONFIG_KEY,
+} from '../../constants/constants'
 import CodeMirror from '@uiw/react-codemirror'
 import { json } from '@codemirror/lang-json'
 import { autocompletion } from '@codemirror/autocomplete'
@@ -8,15 +13,15 @@ import { getUniqueId } from '../../utils'
 import useDataset, { ConfigModel } from '../../hooks'
 
 export interface AddSchemaModalProps {
-  open?: boolean;
-  target?: ConfigModel;
-  onClose?: () => void;
+  open?: boolean
+  target?: ConfigModel
+  onClose?: () => void
 }
 
 const AddSchemaModal = (props: AddSchemaModalProps) => {
-  const { open, target, onClose } = props;
+  const { open, target, onClose } = props
   const [form] = Form.useForm()
-  const { insert } = useDataset();
+  const { insert } = useDataset()
 
   const jsonExtension = useMemo(() => {
     const ext = json()
@@ -25,9 +30,8 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
 
   useEffect(() => {
     // chrome.storage.sync.get([CACHE_CONFIG_KEY]).then((res) => {
-
     // })
-  }, []);
+  }, [])
 
   const handleSubmit = async () => {
     const values = await form.validateFields()
@@ -38,11 +42,18 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
     })
   }
   return (
-    <Modal open={open} title="添加拦截项" okText="保存" cancelText="取消" onCancel={onClose} onOk={handleSubmit}>
+    <Modal
+      open={open}
+      title="添加拦截项"
+      okText="保存"
+      cancelText="取消"
+      onCancel={onClose}
+      onOk={handleSubmit}
+    >
       <Form
         initialValues={{
           [ColumnKeyEnum.OPEN]: true,
-          [ColumnKeyEnum.MODEL]: "{\n  \n}"
+          [ColumnKeyEnum.MODE]: ColumnKeyEnum.MODEL,
         }}
         form={form}
       >
@@ -71,45 +82,67 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
           <Input.TextArea rows={2} placeholder="简单描述" />
         </Form.Item>
 
-        <Form.Item name={ColumnKeyEnum.RESPONSE}>
-          <Input.TextArea></Input.TextArea>
+        <Form.Item name={ColumnKeyEnum.MODE}>
+          <Radio.Group>
+            <Radio value={ColumnKeyEnum.RESPONSE}>JSON</Radio>
+            <Radio value={ColumnKeyEnum.MODEL}>JSON model</Radio>
+          </Radio.Group>
         </Form.Item>
-        <Form.Item
-          name={ColumnKeyEnum.MODEL}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <CodeMirror
-            extensions={[
-              jsonExtension,
-              autocompletion({
-                override: [
-                  function (context) {
-                    // console.info(context)
-                    let word = context.matchBefore(/@\w*/)
-                    console.info(word)
 
-                    return {
-                      from: word?.from || -1,
-                      to: word?.to,
-                      options: KEYWORDS_LIST.map((item) => {
-                        return {
-                          label: item.keyword,
-                          apply: item.value,
-                          type: 'keyword',
-                          detail: item.doc,
-                        }
+        <Form.Item noStyle dependencies={[ColumnKeyEnum.MODE]}>
+          {(form) => {
+            const mode = form.getFieldValue(ColumnKeyEnum.MODE)
+
+            if (mode === ColumnKeyEnum.RESPONSE) {
+              return (
+                <Form.Item name={ColumnKeyEnum.RESPONSE}>
+                  <Input.TextArea></Input.TextArea>
+                </Form.Item>
+              )
+            }
+
+            if (mode === ColumnKeyEnum.MODEL) {
+              return (
+                <Form.Item
+                  name={ColumnKeyEnum.MODEL}
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <CodeMirror
+                    placeholder={'{\n  "id": "@id()",\n  "name": "@name()"\n}'}
+                    extensions={[
+                      jsonExtension,
+                      autocompletion({
+                        override: [
+                          function (context) {
+                            let word = context.matchBefore(/@\w*/)
+
+                            return {
+                              from: word?.from || -1,
+                              to: word?.to,
+                              options: KEYWORDS_LIST.map((item) => {
+                                return {
+                                  label: item.keyword,
+                                  apply: item.value,
+                                  type: 'keyword',
+                                  detail: item.doc,
+                                }
+                              }),
+                            }
+                          },
+                        ],
                       }),
-                    }
-                  },
-                ],
-              }),
-            ]}
-            // basicSetup={{ autocompletion: true }}
-          />
+                    ]}
+                    // basicSetup={{ autocompletion: true }}
+                  />
+                </Form.Item>
+              )
+            }
+            return null
+          }}
         </Form.Item>
       </Form>
     </Modal>

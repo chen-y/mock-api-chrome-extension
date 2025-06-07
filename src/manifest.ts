@@ -27,6 +27,8 @@ export default defineManifest({
   },
   content_scripts: [
     {
+      // run_at: 'document_start',
+      // world: 'MAIN',
       matches: ['http://*/*', 'https://*/*'],
       js: ['src/contentScript/index.ts'],
     },
@@ -40,7 +42,7 @@ export default defineManifest({
       matches: [],
     },
   ],
-  permissions: ['sidePanel', 'storage', 'tabs'],
+  permissions: ['sidePanel', 'storage', 'tabs', 'scripting'],
   // chrome_url_overrides: {
   //   newtab: 'newtab.html',
   // },
