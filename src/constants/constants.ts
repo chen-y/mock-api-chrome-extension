@@ -3,7 +3,7 @@ export enum ColumnKeyEnum {
   PATH = 'path',
   METHOD = 'method',
   DESC = 'desc',
-  RESPONSE = 'resopnse',
+  RESPONSE = 'response',
   MODEL = 'model',
   MODE = 'mode',
 }

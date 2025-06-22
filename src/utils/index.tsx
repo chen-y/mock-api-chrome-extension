@@ -4,7 +4,8 @@ export function getUniqueId() {
   return `${now}${s1}`
 }
 
-export function setupXMLRequestProxy(w) {
+export function setupXMLRequestProxy() {
+  console.info('start proxy')
   const OriginXML = window.XMLHttpRequest
 
   class CustomHttp extends OriginXML {
@@ -30,5 +31,5 @@ export function setupXMLRequestProxy(w) {
   // Object.defineProperty(window, 'XMLHttpRequest', {
   //   value: CustomHttp,
   // })
-  window.XMLHttpRequest = CustomHttp
+  window.XMLHttpRequest = 123
 }

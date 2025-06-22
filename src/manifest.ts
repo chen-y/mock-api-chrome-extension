@@ -1,4 +1,4 @@
-import { defineManifest } from '@crxjs/vite-plugin'
+import { defineManifest, defineDynamicResource } from '@crxjs/vite-plugin'
 import packageData from '../package.json'
 
 //@ts-ignore
@@ -27,10 +27,10 @@ export default defineManifest({
   },
   content_scripts: [
     {
-      // run_at: 'document_start',
-      // world: 'MAIN',
-      matches: ['http://*/*', 'https://*/*'],
-      js: ['src/contentScript/index.ts'],
+      run_at: 'document_start',
+      world: 'MAIN',
+      matches: ['<all_urls>'],
+      js: ['src/contentScript/index.ts', 'src/setup.ts'],
     },
   ],
   side_panel: {
@@ -39,10 +39,14 @@ export default defineManifest({
   web_accessible_resources: [
     {
       resources: ['img/logo-16.png', 'img/logo-32.png', 'img/logo-48.png', 'img/logo-128.png'],
-      matches: [],
+      matches: ['<all_urls>'],
     },
+    {
+      matches: ['<all_urls>'],
+      resources: ['src/setup.ts'],
+    }
   ],
-  permissions: ['sidePanel', 'storage', 'tabs', 'scripting'],
+  permissions: ['sidePanel', 'storage', 'tabs', 'scripting', 'activeTab', 'userScripts'],
   // chrome_url_overrides: {
   //   newtab: 'newtab.html',
   // },
