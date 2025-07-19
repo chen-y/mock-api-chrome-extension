@@ -28,9 +28,9 @@ export default defineManifest({
   content_scripts: [
     {
       run_at: 'document_start',
-      world: 'MAIN',
+      // world: 'MAIN',
       matches: ['<all_urls>'],
-      js: ['src/contentScript/index.ts', 'src/setup.ts'],
+      js: ['src/contentScript/index.ts'],
     },
   ],
   side_panel: {
@@ -42,8 +42,8 @@ export default defineManifest({
       matches: ['<all_urls>'],
     },
     {
-      matches: ['<all_urls>'],
       resources: ['src/setup.ts'],
+      matches: ['<all_urls>'],
     }
   ],
   permissions: ['sidePanel', 'storage', 'tabs', 'scripting', 'activeTab', 'userScripts'],

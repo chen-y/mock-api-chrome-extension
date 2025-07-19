@@ -1,16 +1,16 @@
-import { setupXMLRequestProxy } from "./utils";
+import { setupXMLRequestProxy } from './utils'
 
-const prefix = '[setup]: ';
-console.info(prefix, 'start');
+const prefix = '[setup]: '
+console.info(prefix, 'start')
 
 function initialProxy() {
-  console.log('initial');
+  console.log('initial')
 
-  setupXMLRequestProxy();
+  setupXMLRequestProxy()
 }
 
 // initialProxy();
-export  { initialProxy };
-window.abc = 123123;
+export { initialProxy }
+// window.abc = 123123;
 
-console.log(prefix, 'end');
+console.log(prefix, 'end')

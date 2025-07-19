@@ -31,5 +31,5 @@ export function setupXMLRequestProxy() {
   // Object.defineProperty(window, 'XMLHttpRequest', {
   //   value: CustomHttp,
   // })
-  window.XMLHttpRequest = 123
+  // window.XMLHttpRequest = 123
 }
