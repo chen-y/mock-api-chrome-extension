@@ -44,7 +44,7 @@ export default defineManifest({
     {
       resources: ['src/setup.ts'],
       matches: ['<all_urls>'],
-    }
+    },
   ],
   permissions: ['sidePanel', 'storage', 'tabs', 'scripting', 'activeTab', 'userScripts'],
   // chrome_url_overrides: {

@@ -1,5 +1,3 @@
-import { initialProxy } from "../setup"
-
 console.log('background is running')
 
 chrome.runtime.onMessage.addListener((request) => {
@@ -27,8 +25,6 @@ chrome.runtime.onMessage.addListener((request) => {
 //   ],
 //   world: chrome.userScripts.ExecutionWorld.MAIN
 // }]);
-
-
 
 // chrome.tabs.getCurrent().then((tab) => {
 //   console.info(tab, 'tttt')

@@ -16,9 +16,11 @@
     "node": ">=14.18.0"
   },
   "scripts": {
-    "setup": "tsc --project tsconfig.dev.json",
-    "dev": "yarn setup && vite",
-    "build": "tsc && vite build",
+    "setup": "tsc --watch --project tsconfig.dev.json",
+    "dev": "yarn build:setup & vite",
+    "start": "vite",
+    "build:setup": "rollup -w --config vite.setup.config.mjs",
+    "build": "tsc --project tsconfig.json && vite build",
     "preview": "vite preview",
     "fmt": "prettier --write '**/*.{tsx,ts,json,css,scss,md}'",
     "zip": "npm run build && node src/zip.js"
@@ -40,6 +42,7 @@
     "gulp": "^5.0.0",
     "gulp-zip": "^6.0.0",
     "prettier": "^3.0.3",
+    "rollup-plugin-typescript2": "^0.36.0",
     "typescript": "^5.2.2",
     "vite": "^5.4.10"
   }
