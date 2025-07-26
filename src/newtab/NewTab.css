@@ -10,13 +10,7 @@ section::before {
 }
 
 section {
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  padding: 20px;
 }
 
 h1 {
@@ -26,9 +20,9 @@ h1 {
   margin: 2rem auto;
 }
 
-a {
+/* a {
   font-size: 0.5rem;
   margin: 0.5rem;
   color: #cccccc;
   text-decoration: none;
-}
+} */

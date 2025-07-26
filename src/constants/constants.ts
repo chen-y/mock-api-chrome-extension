@@ -112,3 +112,9 @@ export const KEYWORDS_LIST = [
 ]
 
 export const CACHE_CONFIG_KEY = 'mc_dataset'
+
+export const GLOBAL_SWITCH_KEY = 'global_switch'
+
+export const CONTENT_PORT_NAME = 'mc_content_name'
+
+export const UPDATE_CONFIG_NAME = 'update_config'

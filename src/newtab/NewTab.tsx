@@ -28,7 +28,6 @@ export const NewTab = () => {
   return (
     <section>
       <CommonList />
-
       <AddSchemaModal />
     </section>
   )

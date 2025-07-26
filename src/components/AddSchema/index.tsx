@@ -1,4 +1,4 @@
-import { AutoComplete, Form, Input, Modal, Select, Space, Switch, Radio } from 'antd'
+import { AutoComplete, Form, Input, Modal, Select, Space, Switch, Radio, message } from 'antd'
 import {
   MethodEnum,
   ColumnKeyEnum,
@@ -21,7 +21,9 @@ export interface AddSchemaModalProps {
 const AddSchemaModal = (props: AddSchemaModalProps) => {
   const { open, target, onClose } = props
   const [form] = Form.useForm()
-  const { insert } = useDataset()
+  const { dataset, globalSwitch, insert } = useDataset()
+
+  const isEdit = Boolean(target)
 
   const jsonExtension = useMemo(() => {
     const ext = json()
@@ -31,15 +33,44 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
   useEffect(() => {
     // chrome.storage.sync.get([CACHE_CONFIG_KEY]).then((res) => {
     // })
-  }, [])
+    if (target) {
+      form.setFieldsValue({
+        ...target,
+      })
+    }
+
+    return () => {
+      form.resetFields()
+    }
+  }, [target])
 
   const handleSubmit = async () => {
     const values = await form.validateFields()
-    // getUniqueId();
+    console.log(values)
+    const isExisting = dataset?.some((d) => {
+      if (d.method === values.method && d.path === values.path) {
+        return true
+      }
+      return false
+    })
+    if (isExisting) {
+      message.error({
+        content: '已存在相同方法的路径',
+        duration: 3,
+      })
+      return
+    }
     insert({
       ...values,
       id: getUniqueId(),
     })
+    message.success({
+      content: '添加成功',
+      duration: 3,
+    })
+
+    form.resetFields()
+    onClose?.()
   }
   return (
     <Modal
@@ -58,7 +89,7 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
         form={form}
       >
         <Form.Item name={ColumnKeyEnum.OPEN}>
-          <Switch />
+          <Switch disabled={globalSwitch} />
         </Form.Item>
         <Form.Item>
           <Space.Compact>
