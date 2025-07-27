@@ -1,22 +1,10 @@
 import { useEffect, useState } from 'react'
 import {
   CACHE_CONFIG_KEY,
-  ColumnKeyEnum,
-  MethodEnum,
   GLOBAL_SWITCH_KEY,
   UPDATE_CONFIG_NAME,
+  ConfigModel,
 } from '../constants/constants'
-
-export interface ConfigModel {
-  [ColumnKeyEnum.DESC]: string
-  [ColumnKeyEnum.METHOD]: MethodEnum
-  [ColumnKeyEnum.MODEL]: string
-  [ColumnKeyEnum.OPEN]: boolean
-  [ColumnKeyEnum.RESPONSE]: string
-  [ColumnKeyEnum.PATH]: string
-  mode: ColumnKeyEnum.RESPONSE | ColumnKeyEnum.MODEL
-  id: string
-}
 
 export default function useDataset() {
   const [dataset, setDataset] = useState<ConfigModel[]>([])

@@ -3,7 +3,8 @@ import './list.css'
 import { ColumnKeyEnum, COLUMN_CONFIG_MAP } from '../../constants/constants'
 import AddSchemaModal from '../AddSchema'
 import { useState } from 'react'
-import useDataset, { ConfigModel } from '../../hooks'
+import useDataset from '../../hooks'
+import { ConfigModel } from '../../constants/constants'
 
 const CommonList = () => {
   const [modalState, setModalState] = useState<{ open: boolean; target?: ConfigModel }>({

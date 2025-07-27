@@ -10,7 +10,8 @@ import { json } from '@codemirror/lang-json'
 import { autocompletion } from '@codemirror/autocomplete'
 import { useMemo, useEffect } from 'react'
 import { getUniqueId } from '../../utils'
-import useDataset, { ConfigModel } from '../../hooks'
+import useDataset from '../../hooks'
+import { ConfigModel } from '../../constants/constants'
 
 export interface AddSchemaModalProps {
   open?: boolean

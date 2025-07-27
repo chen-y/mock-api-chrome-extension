@@ -1,5 +1,13 @@
 console.log('background is running')
 import { CONTENT_PORT_NAME, UPDATE_CONFIG_NAME } from '../constants/constants'
+import mockjs from 'mockjs'
+
+console.log(mockjs, globalThis)
+
+mockjs.mock('/api/test', {
+  name: '@cname',
+  'age|18-60': 18,
+})
 
 let contentScriptPort: chrome.runtime.Port | null = null
 

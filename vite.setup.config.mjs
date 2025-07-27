@@ -37,6 +37,9 @@ export default {
     file: 'build/src/setup.js',
     format: 'iife',
     name: 'apiProxySetup',
+    globals: {
+      mockjs: 'mockjs',
+    },
   },
   plugins: [typescript()],
 }

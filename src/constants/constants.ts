@@ -58,6 +58,17 @@ export enum MethodEnum {
   DELETE = 'delete',
 }
 
+export interface ConfigModel {
+  [ColumnKeyEnum.DESC]: string
+  [ColumnKeyEnum.METHOD]: MethodEnum
+  [ColumnKeyEnum.MODEL]: string
+  [ColumnKeyEnum.OPEN]: boolean
+  [ColumnKeyEnum.RESPONSE]: string
+  [ColumnKeyEnum.PATH]: string
+  mode: ColumnKeyEnum.RESPONSE | ColumnKeyEnum.MODEL
+  id: string
+}
+
 export const KEYWORDS_LIST = [
   {
     keyword: '@boolean',
@@ -118,3 +129,5 @@ export const GLOBAL_SWITCH_KEY = 'global_switch'
 export const CONTENT_PORT_NAME = 'mc_content_name'
 
 export const UPDATE_CONFIG_NAME = 'update_config'
+
+export const DATA_TO_SETUP = 'data_to_setup'
