@@ -42,6 +42,10 @@ export default function useDataset() {
 
   const updateGlobalSwitch = (bool: boolean) => {
     chrome.storage.sync.set({ [GLOBAL_SWITCH_KEY]: bool })
+    chrome.runtime.sendMessage({
+      type: UPDATE_CONFIG_NAME,
+      data: bool,
+    })
   }
 
   useEffect(() => {

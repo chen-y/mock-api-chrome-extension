@@ -1,5 +1,6 @@
 import {
   setupXMLRequestProxy,
+  setFetchProxy,
   DATA_TO_SETUP,
   ConfigModel,
   IData,
@@ -15,6 +16,7 @@ function initialProxy(d?: IData) {
   // console.log('initial')
 
   setupXMLRequestProxy(d)
+  setFetchProxy()
 }
 
 initialProxy()
@@ -24,7 +26,8 @@ window.addEventListener('message', (event) => {
   const { data } = event
 
   if (data?.type === DATA_TO_SETUP) {
-    const iData = data as IData
+    const iData = data?.data as IData
+    // console.log('idata', iData)
     initialProxy(iData)
   }
 })
