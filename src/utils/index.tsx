@@ -13,12 +13,6 @@ export {
   GLOBAL_SWITCH_KEY,
 } from '../constants/constants'
 
-// import mockjs from 'mockjs'
-// require('mockjs')
-// console.log(mockjs)
-
-type XHROpen = XMLHttpRequest['open']
-
 export interface IData {
   global_switch: boolean
   mc_dataset: ConfigModel[]
@@ -41,10 +35,14 @@ function urlMatch(url: string, matchStr: string) {
   return url.includes(matchStr)
 }
 
+function isSameMethod(method: string, configMethod: string) {
+  return method?.toLowerCase() === configMethod?.toLowerCase()
+}
+
 function isMatch(config: ConfigModel, url: string, method: string) {
   const { [ColumnKeyEnum.METHOD]: configMethod, [ColumnKeyEnum.PATH]: configPath } = config || {}
   if (configMethod) {
-    return method === configMethod && urlMatch(url, configPath)
+    return isSameMethod(method, configMethod) && urlMatch(url, configPath)
   }
   return urlMatch(url, configPath)
 }
@@ -64,7 +62,7 @@ export function setupXMLRequestProxy(d?: IData) {
     readyState: number = 0
     responseText: string = ''
 
-    method: string = ''
+    _method: string = ''
 
     constructor() {
       super()
@@ -72,8 +70,6 @@ export function setupXMLRequestProxy(d?: IData) {
       // console.log(this.onreadystatechange)
 
       this.addEventListener('readystatechange', () => {
-        console.log(this.getResponseHeader('method'), 'this')
-
         // 1. 检测是否需要拦截
         const { [GLOBAL_SWITCH_KEY]: globalSwitch, [CACHE_CONFIG_KEY]: configs } = store
 
@@ -81,16 +77,12 @@ export function setupXMLRequestProxy(d?: IData) {
           return
         }
 
-        const config = configs.find((c) => isMatch(c, this.responseURL, 'GET'))
+        const config = configs.find((c) => isMatch(c, this.responseURL, this._method))
+        console.log(chrome)
 
         // 存在匹配路径，并且是打开状态
         if (config && config[ColumnKeyEnum.OPEN]) {
           console.log('需要拦截')
-          // this.responseText = config[ColumnKeyEnum.MODE] === ColumnKeyEnum.MODEL ?
-          // if (config[ColumnKeyEnum.MODE] === ColumnKeyEnum.MODEL) {
-          //   this.responseText = mock.mock(JSON.stringify(config[ColumnKeyEnum.MODEL]))
-          //   console.log(this.responseText)
-          // }
           this.status = 200
           this.statusText = 'DONE'
           this.readyState = 4
@@ -99,21 +91,18 @@ export function setupXMLRequestProxy(d?: IData) {
               ? config[ColumnKeyEnum.MODEL]
               : config[ColumnKeyEnum.RESPONSE]
         }
-        console.log('proxy change')
       })
     }
 
-    // 重写open方法以保存请求方法
-    // ts-nocheck
     open = (
       method: string,
       url: string | URL,
-      async: boolean,
+      async?: boolean,
       username?: string | null,
       password?: string | null,
-    ) => {
-      this.method = method
-      super.open(method, url, async, username, password)
+    ): void => {
+      this._method = method
+      super.open(method, url, async ?? true, username, password)
     }
   }
 
@@ -127,7 +116,7 @@ export function setFetchProxy() {
   window.fetch = function (input, init) {
     console.log(input)
     let url = ''
-    let method = (init?.method || 'GET').toString()
+    let _method = (init?.method || 'GET').toString()
     if (typeof input === 'string') {
       url = input
     } else if (input instanceof Request) {
@@ -136,8 +125,28 @@ export function setFetchProxy() {
       url = input.href
     }
 
-    return new Promise((resolve) => {
-      resolve(new Response('{}'))
+    return OriginFetch(input, init).then((res) => {
+      return new Promise((resolve) => {
+        const { [GLOBAL_SWITCH_KEY]: globalSwitch, [CACHE_CONFIG_KEY]: configs } = store
+
+        if (!globalSwitch || !configs?.length) {
+          resolve(res)
+          return
+        }
+
+        const config = configs.find((c) => isMatch(c, url, _method))
+        // console.log(config)
+
+        if (config && config[ColumnKeyEnum.OPEN]) {
+          const result =
+            config[ColumnKeyEnum.MODE] === ColumnKeyEnum.MODEL
+              ? config[ColumnKeyEnum.MODEL]
+              : config[ColumnKeyEnum.RESPONSE]
+          resolve(new Response(result))
+        } else {
+          resolve(res)
+        }
+      })
     })
   }
 }

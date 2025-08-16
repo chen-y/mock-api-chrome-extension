@@ -10,16 +10,18 @@
 </body>
 
 <script>
-// setTimeout(() => {
-//     const xhr = new XMLHttpRequest();
-//   xhr.open('get', '/api/list');
-//   xhr.send();
+setTimeout(() => {
+    const xhr = new XMLHttpRequest();
+  xhr.open('get', '/api/test');
+  xhr.send();
 
-//   xhr.onreadystatechange = () => {
-//     if (xhr.readyState === 4) {
-//       // console.info(xhr)
-//     }
-//   }
-// }, 1000);
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      console.info(xhr.responseText)
+    }
+  }
+
+  // window.fetch('/api/test').then(res => res.json()).then(data => console.log(data))
+}, 1);
 </script>
 </html>

@@ -1,16 +1,4 @@
-import {
-  setupXMLRequestProxy,
-  setFetchProxy,
-  DATA_TO_SETUP,
-  ConfigModel,
-  IData,
-  // CACHE_CONFIG_KEY,
-  // GLOBAL_SWITCH_KEY,
-} from './utils'
-// import { DATA_TO_SETUP } from './constants/constants'
-// import mockjs from 'mockjs'
-
-// console.log(mockjs)
+import { setupXMLRequestProxy, setFetchProxy, DATA_TO_SETUP, ConfigModel, IData } from './utils'
 
 function initialProxy(d?: IData) {
   // console.log('initial')

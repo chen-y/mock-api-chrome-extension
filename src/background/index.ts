@@ -1,6 +1,6 @@
 console.log('background is running')
 import { CONTENT_PORT_NAME, UPDATE_CONFIG_NAME } from '../constants/constants'
-// import mockjs from 'mockjs'
+import mockjs from 'mockjs'
 
 // console.log(mockjs, globalThis)
 
@@ -8,6 +8,8 @@ import { CONTENT_PORT_NAME, UPDATE_CONFIG_NAME } from '../constants/constants'
 //   name: '@cname',
 //   'age|18-60': 18,
 // })
+// @ts-ignore
+chrome.app.mockjs = mockjs
 
 let contentScriptPort: chrome.runtime.Port | null = null
 
@@ -35,8 +37,6 @@ chrome.runtime.onMessage.addListener((request, sender) => {
   }
 
   if (request.type === UPDATE_CONFIG_NAME) {
-    console.log('update config')
-    console.log(request, contentScriptPort)
     contentScriptPort?.postMessage(request)
   }
 })

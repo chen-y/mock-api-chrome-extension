@@ -22,7 +22,7 @@ export interface AddSchemaModalProps {
 const AddSchemaModal = (props: AddSchemaModalProps) => {
   const { open, target, onClose } = props
   const [form] = Form.useForm()
-  const { dataset, globalSwitch, insert } = useDataset()
+  const { dataset, globalSwitch, insert, edit } = useDataset()
 
   const isEdit = Boolean(target)
 
@@ -48,27 +48,39 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
   const handleSubmit = async () => {
     const values = await form.validateFields()
     console.log(values)
-    const isExisting = dataset?.some((d) => {
-      if (d.method === values.method && d.path === values.path) {
-        return true
-      }
-      return false
-    })
-    if (isExisting) {
-      message.error({
-        content: '已存在相同方法的路径',
+    if (isEdit) {
+      edit({
+        ...target,
+        ...values,
+      })
+      message.success({
+        content: '修改成功',
         duration: 3,
       })
-      return
+    } else {
+      const isExisting = dataset?.some((d) => {
+        if (d.method === values.method && d.path === values.path) {
+          return true
+        }
+        return false
+      })
+      if (isExisting) {
+        message.error({
+          content: '已存在相同方法的路径',
+          duration: 3,
+        })
+        return
+      }
+      insert({
+        ...values,
+        id: getUniqueId(),
+      })
+
+      message.success({
+        content: '添加成功',
+        duration: 3,
+      })
     }
-    insert({
-      ...values,
-      id: getUniqueId(),
-    })
-    message.success({
-      content: '添加成功',
-      duration: 3,
-    })
 
     form.resetFields()
     onClose?.()
@@ -90,7 +102,7 @@ const AddSchemaModal = (props: AddSchemaModalProps) => {
         form={form}
       >
         <Form.Item name={ColumnKeyEnum.OPEN}>
-          <Switch disabled={globalSwitch} />
+          <Switch disabled={!globalSwitch} />
         </Form.Item>
         <Form.Item>
           <Space.Compact>
